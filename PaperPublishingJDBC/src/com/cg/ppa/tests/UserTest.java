@@ -46,7 +46,7 @@ class UserTest {
 	}
 
 	@Test
-	@Order(3)
+	@Order(4)
 	void testDeleteUser() {
 		try {
 			service.deleteUser(10);
