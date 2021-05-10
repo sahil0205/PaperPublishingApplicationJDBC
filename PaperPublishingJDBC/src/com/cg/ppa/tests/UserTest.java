@@ -3,7 +3,6 @@ package com.cg.ppa.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import com.cg.ppa.DBConnection;
-import com.cg.ppa.entity.Category;
 import com.cg.ppa.entity.User;
 import com.cg.ppa.service.LoginService;
 
