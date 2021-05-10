@@ -8,7 +8,7 @@ class PaperTests {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		fail(" This is Not yet implemented");
 	}
 
 }
