@@ -1,10 +1,12 @@
 package com.cg.ppa.tests;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -46,6 +48,17 @@ class CategoryTests {
 
 	@Test
 	@Order(2)
+	void testViewAllCategory() {
+		try {
+			List<Category> categoryList = service.viewAllCategory();
+			assertNotNull(categoryList);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	@Test
+	@Order(3)
 	void testDeleteCategory() {
 		try {
 			service.deleteCategory(10);
