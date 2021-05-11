@@ -61,7 +61,7 @@ public class NewsService {
 			List<News> newsList = new ArrayList<>();
 
 			while (rs.next()) {
-				News news = new News();
+				News news = extractNews(rs);
 				newsList.add(news);
 			}
 			return newsList;
@@ -77,12 +77,9 @@ public class NewsService {
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
+			News news = null;
 			statement = connection.createStatement();
-
-			News news = new News();
-
-			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM news_master where newsid='" + id + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM news_master where newsId='" + id + "'");
 			while (rs.next()) {
 				news = extractNews(rs);
 			}
@@ -163,8 +160,8 @@ public class NewsService {
 		news.setNewsId(rs.getInt(1));
 		news.setHeadline(rs.getString(2));
 		news.setReporterId(rs.getInt(3));
-		news.setLocation(rs.getString(5));
 		news.setCategoryId(rs.getInt(4));
+		news.setLocation(rs.getString(5));
 		news.setNewsDescription(rs.getString(6));
 
 		return news;
