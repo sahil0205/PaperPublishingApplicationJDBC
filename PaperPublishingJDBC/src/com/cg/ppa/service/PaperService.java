@@ -36,7 +36,7 @@ public class PaperService {
 		}
 	}
 
-	public Paper viewPaperById(int id) {
+	public <T> Paper viewPaperById(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -77,7 +77,7 @@ public class PaperService {
 		}
 	}
 
-	public void deletePaper(int id) throws Exception {
+	public <T> void deletePaper(T id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -95,7 +95,7 @@ public class PaperService {
 		}
 	}
 
-	public Paper viewPaperByPublishDate(Date publishDate) {
+	public <T> Paper viewPaperByPublishDate(T publishDate) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -115,7 +115,7 @@ public class PaperService {
 		}
 	}
 
-	public Paper updatePaper(int id) {
+	public <T> Paper updatePaper(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;

@@ -60,7 +60,7 @@ public class LoginService {
 		}
 	}
 
-	public User viewUserById(int id) {
+	public <T> User viewUserById(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -81,7 +81,7 @@ public class LoginService {
 		}
 	}
 
-	public void deleteUser(int id) throws Exception {
+	public <T> void deleteUser(T id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -97,7 +97,7 @@ public class LoginService {
 		}
 	}
 
-	public User updateUser(int id) {
+	public <T> User updateUser(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -118,7 +118,7 @@ public class LoginService {
 		}
 	}
 
-	public User loginUser(String email, String password) {
+	public <T,U> User loginUser(T email, U password) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;

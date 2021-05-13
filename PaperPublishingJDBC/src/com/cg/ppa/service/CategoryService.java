@@ -54,7 +54,7 @@ public class CategoryService {
 		}
 	}
 
-	public Category viewCategoryById(int id) {
+	public <T>Category viewCategoryById(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -74,7 +74,7 @@ public class CategoryService {
 		}
 	}
 
-	public void deleteCategory(int id) throws Exception {
+	public <T> void deleteCategory(T id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -91,7 +91,7 @@ public class CategoryService {
 		}
 	}
 
-	public Category updateCategory(int id) {
+	public <T> Category updateCategory(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;

@@ -34,26 +34,26 @@ public class UserMain {
 			case 3: {
 				System.out.print("Enter User Id to search: ");
 				int id = sc.nextInt();
-				System.out.println(service.viewUserById(id));
+				System.out.println(service.<Integer>viewUserById(id));
 				break;
 			}
 			case 4: {
 				System.out.print("Enter User Id to delete: ");
 				int id = sc.nextInt();
-				service.deleteUser(id);
+				service.<Integer>deleteUser(id);
 				break;
 			}
 			case 5: {
 				System.out.print("Enter User Id to update: ");
 				int id = sc.nextInt();
-				System.out.println(service.updateUser(id));
+				System.out.println(service.<Integer>updateUser(id));
 			}
 			case 6: {
 				System.out.print("Enter email: ");
 				String email = sc.next();
 				System.out.print("Enter password: ");
 				String password = sc.next();
-				System.out.println(service.loginUser(email, password));
+				System.out.println(service.<String, String>loginUser(email, password));
 			}
 			case 7:
 				break;

@@ -34,26 +34,26 @@ public class PaperMain {
 			case 3: {
 				System.out.print("Enter Paper Id to search: ");
 				int id = sc.nextInt();
-				System.out.println(service.viewPaperById(id));
+				System.out.println(service.<Integer>viewPaperById(id));
 				break;
 			}
 			case 4: {
 				System.out.print("Enter Paper Id to delete: ");
 				int id = sc.nextInt();
-				service.deletePaper(id);
+				service.<Integer>deletePaper(id);
 				break;
 			}
 			case 5: {
 				System.out.print("Enter Paper Id to update: ");
 				int id = sc.nextInt();
-				System.out.println(service.updatePaper(id));
+				System.out.println(service.<Integer>updatePaper(id));
 				break;
 			}
 			case 6: {
 				System.out.print("Enter date of publishing: ");
 				String date = sc.next();
 				Date publishDate = Date.valueOf(date);
-				System.out.println(service.viewPaperByPublishDate(publishDate));
+				System.out.println(service.<Date>viewPaperByPublishDate(publishDate));
 				break;
 			}
 			case 7:
