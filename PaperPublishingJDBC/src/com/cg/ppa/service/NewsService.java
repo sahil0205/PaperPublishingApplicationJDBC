@@ -59,7 +59,7 @@ public class NewsService {
 		}
 	}
 
-	public News viewNewsById(int id) {
+	public <T> News viewNewsById(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -78,7 +78,7 @@ public class NewsService {
 		}
 	}
 
-	public void deleteNews(int id) throws Exception {
+	public <T> void deleteNews(T id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -96,7 +96,7 @@ public class NewsService {
 		}
 	}
 
-	public News updateNews(int id) {
+	public <T> News updateNews(T id) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -116,7 +116,7 @@ public class NewsService {
 		}
 	}
 
-	public News viewNewsByLocation(String location) {
+	public <T> News viewNewsByLocation(T location) {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;

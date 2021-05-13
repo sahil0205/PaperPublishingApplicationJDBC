@@ -33,25 +33,25 @@ public class NewsMain {
 			case 3: {
 				System.out.print("Enter News Id to search: ");
 				int id = sc.nextInt();
-				System.out.println(service.viewNewsById(id));
+				System.out.println(service.<Integer>viewNewsById(id));
 				break;
 			}
 			case 4: {
 				System.out.print("Enter News Id to delete: ");
 				int id = sc.nextInt();
-				service.deleteNews(id);
+				service.<Integer>deleteNews(id);
 				break;
 			}
 			case 5: {
 				System.out.print("Enter News Id to update: ");
 				int id = sc.nextInt();
-				System.out.println(service.updateNews(id));
+				System.out.println(service.<Integer>updateNews(id));
 				break;
 			}
 			case 6: {
 				System.out.print("Enter Location: ");
 				String location = sc.next();
-				System.out.println(service.viewNewsByLocation(location));
+				System.out.println(service.<String>viewNewsByLocation(location));
 				break;
 			}
 			case 7:

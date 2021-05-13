@@ -34,19 +34,19 @@ public class CategoryMain {
 			case 3: {
 				System.out.print("Enter Category Id to search: ");
 				int id = sc.nextInt();
-				System.out.println(service.viewCategoryById(id));
+				System.out.println(service.<Integer>viewCategoryById(id));
 				break;
 			}
 			case 4: {
 				System.out.print("Enter Category Id to delete: ");
 				int id = sc.nextInt();
-				service.deleteCategory(id);
+				service.<Integer>deleteCategory(id);
 				break;
 			}
 			case 5: {
 				System.out.print("Enter id of category to be updated: ");
 				int id = sc.nextInt();
-				System.out.println(service.updateCategory(id));
+				System.out.println(service.<Integer>updateCategory(id));
 			}
 			case 7:
 				break;
