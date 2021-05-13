@@ -1,22 +1,22 @@
 package com.cg.ppa;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
+import java.util.Properties;
 
 public class DBConnection {
-	public Connection get_connection() {
+	public Connection get_connection() throws Exception {
 		Connection connection = null;
-		Statement statement = null;
-		String host = "localhost";
-		String port = "5432";
-		String db_name = "PaperPublishingJDBC";
-		String username = "postgres";
-		String password = "0205";
+		FileReader dbFile = new FileReader(
+				"C:\\Users\\SAPALASK\\git\\PaperPublishingUsingJDBC\\PaperPublishingJDBC\\src\\com\\cg\\ppa\\configuration\\db.properties");
+		Properties p = new Properties();
+		p.load(dbFile);
 		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + db_name + "",
-					"" + username + "", "" + password + "");
+			connection = DriverManager.getConnection(
+					"jdbc:postgresql://" + p.getProperty("host") + ":" + p.getProperty("port") + "/"
+							+ p.getProperty("db_name") + "",
+					"" + p.getProperty("username") + "", "" + p.getProperty("password") + "");
 			if (connection != null) {
 				System.out.println("Connection OK ");
 			} else {

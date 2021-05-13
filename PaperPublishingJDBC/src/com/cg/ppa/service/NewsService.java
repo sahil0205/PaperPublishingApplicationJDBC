@@ -21,27 +21,15 @@ public class NewsService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			System.out.print("Enter news id: ");
-			int newsId = sc.nextInt();
-			sc.nextLine();
-			System.out.print("Enter news headline: ");
-			String headline = sc.nextLine();
-			System.out.print("Enter reporter Id: ");
-			int reporterId = sc.nextInt();
-			System.out.print("Enter location: ");
-			String location = sc.next();
-			System.out.print("Enter category Id: ");
-			int categoryId = sc.nextInt();
-			sc.nextLine();
-			System.out.print("Enter news description: ");
-			String newsDescription = sc.nextLine();
+			News newsData = addDetails();
 			String query = "INSERT INTO news_master(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
-					+ newsId + "','" + headline + "','" + reporterId + "','" + categoryId + "','" + location + "','"
-					+ newsDescription + "')";
+					+ newsData.getNewsId() + "','" + newsData.getHeadline() + "','" + newsData.getReporterId() + "','"
+					+ newsData.getCategoryId() + "','" + newsData.getLocation() + "','" + newsData.getNewsDescription()
+					+ "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("News Added succesfully");
-			return new News(newsId, headline, reporterId, location, categoryId, newsDescription);
+			return newsData;
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -90,7 +78,7 @@ public class NewsService {
 		}
 	}
 
-	public void deleteNews(int id) {
+	public void deleteNews(int id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -115,16 +103,10 @@ public class NewsService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			News news = viewNewsById(id);
-			sc.nextLine();
-			System.out.print("Enter new headline: ");
-			String headline = sc.nextLine();
-			news.setHeadline(headline);
-			System.out.print("Enter new description: ");
-			String newsDescription = sc.nextLine();
-			news.setNewsDescription(newsDescription);
-			String query = "update news_master set headline='" + headline + "',newsdescription='" + newsDescription
-					+ "' where newsid='" + id + "'";
+			News news = updateDetails(viewNewsById(id));
+
+			String query = "update news_master set headline='" + news.getHeadline() + "',newsdescription='"
+					+ news.getNewsDescription() + "' where newsid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			return news;
@@ -166,5 +148,36 @@ public class NewsService {
 
 		return news;
 
+	}
+
+	private News addDetails() {
+		System.out.print("Enter news id: ");
+		int newsId = sc.nextInt();
+		sc.nextLine();
+		System.out.print("Enter news headline: ");
+		String headline = sc.nextLine();
+		System.out.print("Enter reporter Id: ");
+		int reporterId = sc.nextInt();
+		System.out.print("Enter location: ");
+		String location = sc.next();
+		System.out.print("Enter category Id: ");
+		int categoryId = sc.nextInt();
+		sc.nextLine();
+		System.out.print("Enter news description: ");
+		String newsDescription = sc.nextLine();
+
+		return new News(newsId, headline, reporterId, location, categoryId, newsDescription);
+	}
+
+	private News updateDetails(News news) {
+		sc.nextLine();
+		System.out.print("Enter new headline: ");
+		String headline = sc.nextLine();
+		news.setHeadline(headline);
+		System.out.print("Enter new description: ");
+		String newsDescription = sc.nextLine();
+		news.setNewsDescription(newsDescription);
+
+		return news;
 	}
 }

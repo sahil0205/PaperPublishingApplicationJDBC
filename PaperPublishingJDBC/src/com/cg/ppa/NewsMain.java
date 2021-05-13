@@ -8,7 +8,7 @@ public class NewsMain {
 
 	static Scanner sc = new Scanner(System.in);
 
-	public static void main(String[] args) {
+	public void main() throws Exception {
 		// TODO Auto-generated method stub
 		NewsService service = new NewsService();
 		DBConnection obj_ConnectDB = new DBConnection();

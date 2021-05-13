@@ -1,10 +1,8 @@
 package com.cg.ppa.tests;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 

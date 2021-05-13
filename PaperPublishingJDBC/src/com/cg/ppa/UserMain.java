@@ -8,7 +8,7 @@ public class UserMain {
 
 	static Scanner sc = new Scanner(System.in);
 
-	public static void main(String[] args) {
+	public void main() throws Exception {
 		// TODO Auto-generated method stub
 		DBConnection obj_ConnectDB = new DBConnection();
 		System.out.println(obj_ConnectDB.get_connection());
