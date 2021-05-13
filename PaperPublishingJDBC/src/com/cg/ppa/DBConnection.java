@@ -23,7 +23,7 @@ public class DBConnection {
 				System.out.println("Connection Failed");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return connection;
 
