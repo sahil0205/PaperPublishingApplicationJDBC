@@ -64,7 +64,7 @@ class PaperTests {
 	
 	@Test
 	@Order(4)
-	public void deletePaper() {
+	public void deletePaper() throws Exception {
 		service.deletePaper(10);
 		Paper paper = service.viewPaperById(10);
 		assertNull(paper);

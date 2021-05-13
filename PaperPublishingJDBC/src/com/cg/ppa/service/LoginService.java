@@ -21,30 +21,15 @@ public class LoginService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			System.out.print("Enter user ID: ");
-			int userId = sc.nextInt();
-
-			System.out.print("Enter User Name: ");
-			String userName = sc.next();
-
-			System.out.print("Enter Role: ");
-			String role = sc.next();
-
-			System.out.print("Enter Contact Number: ");
-			String contactNumber = sc.next();
-
-			System.out.print("Enter Email: ");
-			String emailId = sc.next();
-
-			System.out.print("Enter Password: ");
-			String password = sc.next();
+			User userData = enterDetails();
 			String query = "INSERT INTO user_master(userid, username, role, contactnumber, emailid, password) VALUES('"
-					+ userId + "','" + userName + "','" + role + "','" + contactNumber + "','" + emailId + "','"
-					+ password + "')";
+					+ userData.getUserId() + "','" + userData.getUserName() + "','" + userData.getRole() + "','"
+					+ userData.getContactNumber() + "','" + userData.getEmailId() + "','" + userData.getPassword()
+					+ "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("User added succesfully");
-			return new User(userId, userName, role, contactNumber, emailId, password);
+			return userData;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
@@ -96,7 +81,7 @@ public class LoginService {
 		}
 	}
 
-	public void deleteUser(int id) {
+	public void deleteUser(int id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -119,15 +104,10 @@ public class LoginService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			User user = viewUserById(id);
-			System.out.println("Enter updated role");
-			String role = sc.next();
-			System.out.println("Enter updated contact Number");
-			String contactNumber = sc.next();
-			user.setRole(role);
-			user.setContactNumber(contactNumber);
-			String query = "update user_master set role='" + role + "',contactnumber='" + contactNumber
-					+ "' where userid='" + id + "'";
+			User user = updateDetails(viewUserById(id));
+
+			String query = "update user_master set role='" + user.getRole() + "',contactnumber='"
+					+ user.getContactNumber() + "' where userid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 
@@ -168,6 +148,40 @@ public class LoginService {
 		user.setContactNumber(rs.getString(4));
 		user.setEmailId(rs.getString(5));
 		user.setPassword(rs.getString(6));
+
+		return user;
+	}
+
+	private User enterDetails() {
+		System.out.print("Enter user ID: ");
+		int userId = sc.nextInt();
+
+		System.out.print("Enter User Name: ");
+		String userName = sc.next();
+
+		System.out.print("Enter Role: ");
+		String role = sc.next();
+
+		System.out.print("Enter Contact Number: ");
+		String contactNumber = sc.next();
+
+		System.out.print("Enter Email: ");
+		String emailId = sc.next();
+
+		System.out.print("Enter Password: ");
+		String password = sc.next();
+
+		return new User(userId, userName, role, contactNumber, emailId, password);
+
+	}
+
+	private User updateDetails(User user) {
+		System.out.println("Enter updated role");
+		String role = sc.next();
+		System.out.println("Enter updated contact Number");
+		String contactNumber = sc.next();
+		user.setRole(role);
+		user.setContactNumber(contactNumber);
 
 		return user;
 	}

@@ -1,4 +1,4 @@
-	package com.cg.ppa.service;
+package com.cg.ppa.service;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -20,18 +20,13 @@ public class CategoryService {
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
-
-			System.out.print("Enter Category Id: ");
-			int categoryId = sc.nextInt();
-
-			System.out.print("Enter Category Name: ");
-			String categoryName = sc.next();
-			String query = "INSERT INTO category_master(categoryid, categoryname) VALUES('" + categoryId + "','"
-					+ categoryName + "')";
+			Category categoryData = enterDetails();
+			String query = "INSERT INTO category_master(categoryid, categoryname) VALUES('"
+					+ categoryData.getCategoryId() + "','" + categoryData.getCategoryName() + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("Category added succesfully");
-			return new Category(categoryId, categoryName);
+			return categoryData;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -79,7 +74,7 @@ public class CategoryService {
 		}
 	}
 
-	public void deleteCategory(int id) {
+	public void deleteCategory(int id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -103,12 +98,10 @@ public class CategoryService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			Category category = viewCategoryById(id);
-			System.out.print("Enter updated Category Name: ");
-			String categoryName = sc.next();
-			category.setCategoryName(categoryName);
-			String query = "update category_master set categoryname='" + categoryName + "' where categoryid='" + id
-					+ "'";
+			Category category = updateDetails(viewCategoryById(id));
+
+			String query = "update category_master set categoryname='" + category.getCategoryName()
+					+ "' where categoryid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 
@@ -125,6 +118,24 @@ public class CategoryService {
 		category.setCategoryId(rs.getInt(1));
 		category.setCategoryName(rs.getString(2));
 
+		return category;
+	}
+
+	private Category enterDetails() {
+		System.out.print("Enter Category Id: ");
+		int categoryId = sc.nextInt();
+
+		System.out.print("Enter Category Name: ");
+		String categoryName = sc.next();
+
+		return new Category(categoryId, categoryName);
+
+	}
+
+	private Category updateDetails(Category category) {
+		System.out.print("Enter updated Category Name: ");
+		String categoryName = sc.next();
+		category.setCategoryName(categoryName);
 		return category;
 	}
 

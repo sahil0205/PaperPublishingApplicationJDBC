@@ -22,22 +22,14 @@ public class PaperService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			System.out.print("Enter Paper ID: ");
-			int paperId = sc.nextInt();
-			System.out.print("Enter date of publishing: ");
-			String date = sc.next();
-			Date publishDate = Date.valueOf(date);
-			System.out.print("Enter Editor Id: ");
-			int editorId = sc.nextInt();
-			System.out.print("Enter price: ");
-			int price = sc.nextInt();
+			Paper paperData = addDetails();
 
-			String query = "INSERT INTO paper_master(paperid, publishdate, userid, price) VALUES('" + paperId + "','"
-					+ publishDate + "','" + editorId + "','" + price + "')";
+			String query = "INSERT INTO paper_master(paperid, publishdate, userid, price) VALUES('" + paperData.getPaperId() + "','"
+					+ paperData.getPublishDate() + "','" + paperData.getEditorId() + "','" + paperData.getPrice() + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("Paper Added Successfully");
-			return new Paper(paperId, publishDate, editorId, price);
+			return paperData;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -85,7 +77,7 @@ public class PaperService {
 		}
 	}
 
-	public void deletePaper(int id) {
+	public void deletePaper(int id) throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -130,20 +122,10 @@ public class PaperService {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			Paper paper = viewPaperById(id);
+			Paper paper = updateDetails(viewPaperById(id));
 
-			System.out.print("Enter new publish date: ");
-			String date = sc.next();
-			Date publishDate = Date.valueOf(date);
-			paper.setPublishDate(publishDate);
-			System.out.print("Enter new editor id: ");
-			int editorId = sc.nextInt();
-			paper.setEditorId(editorId);
-			System.out.print("Enter new price: ");
-			int price = sc.nextInt();
-			paper.setPrice(price);
-			String query = "update paper_master set publishdate='" + publishDate + "',userid='" + editorId + "',price='"
-					+ price + "' where paperid='" + id + "'";
+			String query = "update paper_master set publishdate='" + paper.getPublishDate() + "',userid='" + paper.getEditorId() + "',price='"
+					+ paper.getPrice() + "' where paperid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			return paper;
@@ -160,6 +142,36 @@ public class PaperService {
 		paper.setPublishDate(rs.getDate(2));
 		paper.setEditorId(rs.getInt(3));
 		paper.setPrice(rs.getInt(4));
+		return paper;
+	}
+	
+	private Paper addDetails() {
+		System.out.print("Enter Paper ID: ");
+		int paperId = sc.nextInt();
+		System.out.print("Enter date of publishing: ");
+		String date = sc.next();
+		Date publishDate = Date.valueOf(date);
+		System.out.print("Enter Editor Id: ");
+		int editorId = sc.nextInt();
+		System.out.print("Enter price: ");
+		int price = sc.nextInt();
+		
+		return new Paper(paperId, publishDate, editorId, price);
+
+	}
+	
+	private Paper updateDetails(Paper paper) {
+		System.out.print("Enter new publish date: ");
+		String date = sc.next();
+		Date publishDate = Date.valueOf(date);
+		paper.setPublishDate(publishDate);
+		System.out.print("Enter new editor id: ");
+		int editorId = sc.nextInt();
+		paper.setEditorId(editorId);
+		System.out.print("Enter new price: ");
+		int price = sc.nextInt();
+		paper.setPrice(price);
+		
 		return paper;
 	}
 }
