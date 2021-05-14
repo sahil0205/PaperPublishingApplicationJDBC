@@ -1,28 +1,35 @@
 package com.cg.ppa.service;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.News;
 
 public class NewsService {
 	Scanner sc = new Scanner(System.in);
+	AccessFile obj = new AccessFile();
+	Properties p = new Properties();
 
 	public News addNews() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
 			News newsData = addDetails();
-			String query = "INSERT INTO news_master(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
+			String query = "INSERT INTO "+p.getProperty("news_table")+"(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
 					+ newsData.getNewsId() + "','" + newsData.getHeadline() + "','" + newsData.getReporterId() + "','"
 					+ newsData.getCategoryId() + "','" + newsData.getLocation() + "','" + newsData.getNewsDescription()
 					+ "')";
@@ -39,12 +46,14 @@ public class NewsService {
 
 	public List<News> viewAllNews() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM news_master");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("news_table"));
 
 			List<News> newsList = new ArrayList<>();
 
@@ -61,19 +70,22 @@ public class NewsService {
 
 	public <T> News viewNewsById(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			News news = null;
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM news_master where newsId='" + id + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("news_table")+" WHERE newsid='" + id + "'");
 			while (rs.next()) {
 				news = extractNews(rs);
 			}
 			return news;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
+			System.out.println(e.getMessage()+"id error");
 			return null;
 		}
 	}
@@ -86,7 +98,7 @@ public class NewsService {
 
 		try {
 			statement = connection.createStatement();
-			String query = "DELETE FROM news_master where newsId='" + id + "'";
+			String query = "DELETE FROM "+p.getProperty("news_table")+" where newsid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("News Deleted ");
@@ -105,7 +117,7 @@ public class NewsService {
 
 			News news = updateDetails(viewNewsById(id));
 
-			String query = "update news_master set headline='" + news.getHeadline() + "',newsdescription='"
+			String query = "update "+p.getProperty("news_table")+" set headline='" + news.getHeadline() + "',newsdescription='"
 					+ news.getNewsDescription() + "' where newsid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -118,6 +130,8 @@ public class NewsService {
 
 	public <T> News viewNewsByLocation(T location) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -125,13 +139,13 @@ public class NewsService {
 
 			News news = null;
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM news_master where location='" + location + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("news_table")+" where location='" + location + "'");
 			while (rs.next()) {
 				news = extractNews(rs);
 			}
 			return news;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.getMessage()+"Location error");
 			return null;
 		}
 	}

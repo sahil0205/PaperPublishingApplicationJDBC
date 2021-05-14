@@ -2,25 +2,32 @@ package com.cg.ppa.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.User;
 import com.cg.ppa.service.LoginService;
 
 class UserTest {
 	
 	LoginService service = new LoginService();
-
+	static AccessFile obj = new AccessFile();
+	static Properties p = new Properties();
+	
 	@BeforeAll
 	static void testAddUser() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -52,6 +59,12 @@ class UserTest {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	@Test
+	void testLoginUser() {
+		User user = service.loginUser("TestEmail", "TestPass");
+		assertEquals(100, user.getUserId());
+	}
 
 	@AfterAll
 	static void testDeleteUser() {
@@ -69,15 +82,4 @@ class UserTest {
 			System.out.println(e.getMessage());
 		}
 	}
-
-	@Test
-	void testLoginUser() {
-		try {
-			User user = service.loginUser("TestEmail", "TestPass");
-			assertEquals(100, user.getUserId());
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 }

@@ -1,5 +1,6 @@
 package com.cg.ppa.service;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -7,16 +8,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.Paper;
 
 public class PaperService {
 	Scanner sc = new Scanner(System.in);
+	AccessFile obj = new AccessFile();
+	Properties p = new Properties();
 
 	public Paper createPaper() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -24,7 +31,7 @@ public class PaperService {
 
 			Paper paperData = addDetails();
 
-			String query = "INSERT INTO paper_master(paperid, publishdate, userid, price) VALUES('" + paperData.getPaperId() + "','"
+			String query = "INSERT INTO "+p.getProperty("paper_table")+"(paperid, publishdate, userid, price) VALUES('" + paperData.getPaperId() + "','"
 					+ paperData.getPublishDate() + "','" + paperData.getEditorId() + "','" + paperData.getPrice() + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -38,6 +45,8 @@ public class PaperService {
 
 	public <T> Paper viewPaperById(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -45,7 +54,7 @@ public class PaperService {
 
 			Paper paper = null;
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM paper_master where paperId='" + id + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("paper_table")+" where paperId='" + id + "'");
 			while (rs.next()) {
 				paper = extractPaper(rs);
 			}
@@ -59,13 +68,15 @@ public class PaperService {
 
 	public List<Paper> viewAllPaper() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM paper_master");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("paper_table"));
 			List<Paper> paperList = new ArrayList<>();
 			
 			while (rs.next()) {
@@ -81,6 +92,8 @@ public class PaperService {
 	}
 
 	public <T> void deletePaper(T id) throws Exception {
+		FileReader dbFile = obj.readFile();
+		p.load(dbFile);
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -88,7 +101,7 @@ public class PaperService {
 
 		try {
 			statement = connection.createStatement();
-			String query = "DELETE FROM paper_master where paperId='" + id + "'";
+			String query = "DELETE FROM "+p.getProperty("paper_table")+" where paperId='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("Paper Deleted ");
@@ -99,6 +112,8 @@ public class PaperService {
 
 	public <T> Paper viewPaperByPublishDate(T publishDate) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -106,7 +121,7 @@ public class PaperService {
 
 			Paper paper = null;
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM paper_master where publishdate='" + publishDate + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("paper_table")+" WHERE publishdate='" + publishDate + "'");
 			while (rs.next()) {
 				paper = extractPaper(rs);
 			}
@@ -119,6 +134,8 @@ public class PaperService {
 
 	public <T> Paper updatePaper(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -126,7 +143,7 @@ public class PaperService {
 
 			Paper paper = updateDetails(viewPaperById(id));
 
-			String query = "update paper_master set publishdate='" + paper.getPublishDate() + "',userid='" + paper.getEditorId() + "',price='"
+			String query = "update "+p.getProperty("paper_table")+" set publishdate='" + paper.getPublishDate() + "',userid='" + paper.getEditorId() + "',price='"
 					+ paper.getPrice() + "' where paperid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);

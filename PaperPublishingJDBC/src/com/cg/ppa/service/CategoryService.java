@@ -1,27 +1,35 @@
 package com.cg.ppa.service;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.Category;
 
 public class CategoryService {
 	Scanner sc = new Scanner(System.in);
+	AccessFile obj = new AccessFile();
+	Properties p = new Properties();
 
+	
 	public Category addCategory() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			Category categoryData = enterDetails();
-			String query = "INSERT INTO category_master(categoryid, categoryname) VALUES('"
+			String query = "INSERT INTO "+p.getProperty("category_table")+"(categoryid, categoryname) VALUES('"
 					+ categoryData.getCategoryId() + "','" + categoryData.getCategoryName() + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -35,12 +43,14 @@ public class CategoryService {
 
 	public List<Category> viewAllCategory() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM category_master");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("category_table"));
 			List<Category> categories = new ArrayList<>();
 
 			while (rs.next()) {
@@ -56,6 +66,8 @@ public class CategoryService {
 
 	public <T>Category viewCategoryById(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -63,7 +75,7 @@ public class CategoryService {
 			Category category = null;
 
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM category_master where categoryId='" + id + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("category_table")+" where categoryId='" + id + "'");
 			while (rs.next()) {
 				category = extractCategory(rs);
 			}
@@ -75,6 +87,8 @@ public class CategoryService {
 	}
 
 	public <T> void deleteCategory(T id) throws Exception {
+		FileReader dbFile = obj.readFile();
+		p.load(dbFile);
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -82,7 +96,7 @@ public class CategoryService {
 
 		try {
 			statement = connection.createStatement();
-			String query = "DELETE FROM category_master where categoryId='" + id + "'";
+			String query = "DELETE FROM "+p.getProperty("category_table")+" where categoryId='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("Category Deleted ");
@@ -93,6 +107,8 @@ public class CategoryService {
 
 	public <T> Category updateCategory(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -100,7 +116,7 @@ public class CategoryService {
 
 			Category category = updateDetails(viewCategoryById(id));
 
-			String query = "update category_master set categoryname='" + category.getCategoryName()
+			String query = "update "+p.getProperty("category_table") +"set categoryname='" + category.getCategoryName()
 					+ "' where categoryid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);

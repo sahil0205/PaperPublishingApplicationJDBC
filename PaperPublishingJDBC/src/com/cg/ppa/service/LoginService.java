@@ -1,28 +1,35 @@
 package com.cg.ppa.service;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.User;
 
 public class LoginService {
 	Scanner sc = new Scanner(System.in);
+	AccessFile obj = new AccessFile();
+	Properties p = new Properties();
 
 	public User addUser() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
 			User userData = enterDetails();
-			String query = "INSERT INTO user_master(userid, username, role, contactnumber, emailid, password) VALUES('"
+			String query = "INSERT INTO "+p.getProperty("user_table")+"(userid, username, role, contactnumber, emailid, password) VALUES('"
 					+ userData.getUserId() + "','" + userData.getUserName() + "','" + userData.getRole() + "','"
 					+ userData.getContactNumber() + "','" + userData.getEmailId() + "','" + userData.getPassword()
 					+ "')";
@@ -39,12 +46,14 @@ public class LoginService {
 
 	public List<User> viewAllUsers() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM user_master");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("user_table"));
 
 			List<User> userList = new ArrayList<>();
 
@@ -62,6 +71,8 @@ public class LoginService {
 
 	public <T> User viewUserById(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -70,7 +81,7 @@ public class LoginService {
 			User user = null;
 
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM user_master where userId='" + id + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM "+p.getProperty("user_table")+" where userId='" + id + "'");
 			while (rs.next()) {
 				user = extractUser(rs);
 			}
@@ -82,6 +93,8 @@ public class LoginService {
 	}
 
 	public <T> void deleteUser(T id) throws Exception {
+		FileReader dbFile = obj.readFile();
+		p.load(dbFile);
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -89,7 +102,7 @@ public class LoginService {
 
 		try {
 			statement = connection.createStatement();
-			String query = "DELETE FROM user_master where userId='" + id + "'";
+			String query = "DELETE FROM "+p.getProperty("user_table")+"where userId='" + id + "'";
 			statement.executeUpdate(query);
 			System.out.println("User Deleted ");
 		} catch (Exception e) {
@@ -99,6 +112,8 @@ public class LoginService {
 
 	public <T> User updateUser(T id) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
@@ -106,7 +121,7 @@ public class LoginService {
 
 			User user = updateDetails(viewUserById(id));
 
-			String query = "update user_master set role='" + user.getRole() + "',contactnumber='"
+			String query = "update "+p.getProperty("user_table")+"set role='" + user.getRole() + "',contactnumber='"
 					+ user.getContactNumber() + "' where userid='" + id + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -120,13 +135,15 @@ public class LoginService {
 
 	public <T,U> User loginUser(T email, U password) {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			statement = connection.createStatement();
 			User user = null;
-			String query = "select * from user_master where emailid='" + email + "'" + "AND password='" + password
+			String query = "select * from "+p.getProperty("user_table")+" where emailid='" + email + "'" + "AND password='" + password
 					+ "'";
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()) {
@@ -134,7 +151,7 @@ public class LoginService {
 			}
 			return user;
 		} catch (Exception e) {
-			System.out.println("Invalid Credentials");
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
