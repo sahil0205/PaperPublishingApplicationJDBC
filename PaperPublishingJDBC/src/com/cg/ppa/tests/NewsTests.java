@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -30,7 +31,7 @@ class NewsTests {
 			connection = obj_ConnectDB.get_connection();
 			
 			String query = "INSERT INTO news_master(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
-					+ 10 + "','" + "Test Headline" + "','" + 2 + "','" + 1 + "','" + "Test Location" + "','"
+					+ 100 + "','" + "Test Headline" + "','" + 2 + "','" + 1 + "','" + "Test Location" + "','"
 					+ "Test Description" + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -41,22 +42,19 @@ class NewsTests {
 	}
 	
 	@Test
-	@Order(1)
 	void testViewAllNews() {
 		List<News> newsList = service.viewAllNews();
 		assertNotNull(newsList);
 	}
 
 	@Test
-	@Order(2)
 	void testViewNewsById() {
-		System.out.println(service.viewNewsById(10));
-		assertEquals(10, service.viewNewsById(10).getNewsId());
-		assertEquals("Test Headline", service.viewNewsById(10).getHeadline());
+		System.out.println(service.viewNewsById(100));
+		assertEquals(100, service.viewNewsById(100).getNewsId());
+		assertEquals("Test Headline", service.viewNewsById(100).getHeadline());
 	}
 
 	@Test
-	@Order(3)
 	void testViewNewsByLocation() {
 		try {
 			News news = service.viewNewsByLocation("Test Location");
@@ -66,14 +64,21 @@ class NewsTests {
 		}
 	}
 	
-	@Test
-	@Order(4)
-	void testDeleteNews() {
+	@AfterAll
+	static void testDeleteNews() throws Exception {
+		DBConnection obj_ConnectDB = new DBConnection();
+		Connection connection = null;
+		Statement statement = null;
+		connection = obj_ConnectDB.get_connection();
+
 		try {
-			service.deleteNews(10);
-			News news = service.viewNewsById(10);
-			assertNull(news);
-		}catch (Exception e) {
+			statement = connection.createStatement();
+			String query = "DELETE FROM news_master where newsId='" + 100 + "'";
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			System.out.println("News Deleted ");
+		} catch (Exception e) {
+			// TODO: handle exception
 			System.out.println(e.getMessage());
 		}
 	}

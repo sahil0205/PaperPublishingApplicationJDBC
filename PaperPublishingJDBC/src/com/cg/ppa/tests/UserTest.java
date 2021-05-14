@@ -4,9 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import com.cg.ppa.DBConnection;
@@ -26,7 +27,7 @@ class UserTest {
 			connection = obj_ConnectDB.get_connection();
 			
 			String query = "INSERT INTO user_master(userid, username, role, contactnumber, emailid, password) VALUES('"
-					+ 10 + "','" + "TestABC" + "','" + "Editor" + "','" + "123456789" + "','" + "TestEmail" + "','"
+					+ 100 + "','" + "TestABC" + "','" + "Editor" + "','" + "123456789" + "','" + "TestEmail" + "','"
 					+ "TestPass" + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -37,30 +38,43 @@ class UserTest {
 	}
 
 	@Test
-	@Order(1)
 	void testViewUserById() {
-		User user = service.viewUserById(10);
+		User user = service.viewUserById(100);
 		assertEquals("TestABC", user.getUserName());
 	}
-
+	
 	@Test
-	@Order(3)
-	void testDeleteUser() {
+	void testViewAllUsers() {
 		try {
-			service.deleteUser(10);
-			User user = service.viewUserById(10);
-			assertNull(user);
+			List<User> userList = service.viewAllUsers();
+			assertNotNull(userList);
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@AfterAll
+	static void testDeleteUser() {
+		try {
+			DBConnection obj_ConnectDB = new DBConnection();
+			Connection connection = null;
+			Statement statement = null;
+			connection = obj_ConnectDB.get_connection();
+			
+			statement = connection.createStatement();
+			String query = "DELETE FROM user_master where userId='" + 100 + "'";
+			statement.executeUpdate(query);
+			System.out.println("User Deleted ");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
 	@Test
-	@Order(2)
 	void testLoginUser() {
 		try {
 			User user = service.loginUser("TestEmail", "TestPass");
-			assertEquals(10, user.getUserId());
+			assertEquals(100, user.getUserId());
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

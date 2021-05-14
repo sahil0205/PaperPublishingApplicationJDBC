@@ -6,8 +6,8 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import com.cg.ppa.DBConnection;
@@ -27,7 +27,7 @@ class CategoryTests {
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 
-			String query = "INSERT INTO category_master(categoryid, categoryname) VALUES('" + 10 + "','"
+			String query = "INSERT INTO category_master(categoryid, categoryname) VALUES('" + 100 + "','"
 					+ "Test Category" + "')";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
@@ -38,14 +38,12 @@ class CategoryTests {
 	}
 
 	@Test
-	@Order(1)
 	void testViewCategoryById() {
-		Category category = service.viewCategoryById(10);
+		Category category = service.viewCategoryById(100);
 		assertEquals(10, category.getCategoryId());
 	}
 
 	@Test
-	@Order(2)
 	void testViewAllCategory() {
 		try {
 			List<Category> categoryList = service.viewAllCategory();
@@ -55,13 +53,19 @@ class CategoryTests {
 		}
 	}
 	
-	@Test
-	@Order(3)
-	void testDeleteCategory() {
+	@AfterAll
+	static void testDeleteCategory() {
 		try {
-			service.deleteCategory(10);
-			Category category = service.viewCategoryById(10);
-			assertNull(category);
+			DBConnection obj_ConnectDB = new DBConnection();
+			Connection connection = null;
+			Statement statement = null;
+			connection = obj_ConnectDB.get_connection();
+			
+			statement = connection.createStatement();
+			String query = "DELETE FROM category_master where categoryId='" + 100 + "'";
+			statement = connection.createStatement();
+			statement.executeUpdate(query);
+			System.out.println("Category Deleted ");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
