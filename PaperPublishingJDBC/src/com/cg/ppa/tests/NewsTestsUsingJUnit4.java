@@ -4,31 +4,38 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.cg.ppa.DBConnection;
+import com.cg.ppa.configuration.AccessFile;
 import com.cg.ppa.entity.News;
 import com.cg.ppa.service.NewsService;
 
 public class NewsTestsUsingJUnit4 {
 
 	NewsService service = new NewsService();
+	static AccessFile obj = new AccessFile();
+	static Properties p = new Properties();
 	
-	@Before
-	public void addNews() {
+	@BeforeClass
+	public static void addNews() {
 		try {
+			FileReader dbFile = obj.readFile();
+			p.load(dbFile);
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
 			
-			String query = "INSERT INTO news_master(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
+			String query = "INSERT INTO "+p.getProperty("news_table")+"(newsid, headline, userid, categoryid, location, newsdescription) VALUES('"
 					+ 100 + "','" + "Test Headline" + "','" + 2 + "','" + 1 + "','" + "Test Location" + "','"
 					+ "Test Description" + "')";
 			statement = connection.createStatement();
@@ -62,8 +69,10 @@ public class NewsTestsUsingJUnit4 {
 		}
 	}
 	
-	@After
-	public void testDeleteNews() throws Exception {
+	@AfterClass
+	public static void testDeleteNews() throws Exception {
+		FileReader dbFile = obj.readFile();
+		p.load(dbFile);
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;
@@ -71,7 +80,7 @@ public class NewsTestsUsingJUnit4 {
 
 		try {
 			statement = connection.createStatement();
-			String query = "DELETE FROM news_master where newsId='" + 100 + "'";
+			String query = "DELETE FROM "+p.getProperty("news_table")+" where newsId='" + 100 + "'";
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("News Deleted ");
