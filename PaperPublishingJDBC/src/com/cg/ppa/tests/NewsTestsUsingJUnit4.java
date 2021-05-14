@@ -1,29 +1,27 @@
 package com.cg.ppa.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.cg.ppa.DBConnection;
 import com.cg.ppa.entity.News;
 import com.cg.ppa.service.NewsService;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class NewsTests {
+public class NewsTestsUsingJUnit4 {
 
 	NewsService service = new NewsService();
 	
-	@BeforeAll
-	static void addNews() {
+	@Before
+	public void addNews() {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -42,20 +40,20 @@ class NewsTests {
 	}
 	
 	@Test
-	void testViewAllNews() {
+	public void testViewAllNews() {
 		List<News> newsList = service.viewAllNews();
-		assertNotNull(newsList);
-	}
+		assertNotNull(newsList);	
+		}
 
 	@Test
-	void testViewNewsById() {
+	public void testViewNewsById() {
 		System.out.println(service.viewNewsById(100));
 		assertEquals(100, service.viewNewsById(100).getNewsId());
-		assertEquals("Test Headline", service.viewNewsById(100).getHeadline());
-	}
+		assertEquals("Test Headline", service.viewNewsById(100).getHeadline());	
+		}
 
 	@Test
-	void testViewNewsByLocation() {
+	public void testViewNewsByLocation() {
 		try {
 			News news = service.viewNewsByLocation("Test Location");
 			assertEquals("Test Location", news.getLocation());
@@ -64,8 +62,8 @@ class NewsTests {
 		}
 	}
 	
-	@AfterAll
-	static void testDeleteNews() throws Exception {
+	@After
+	public void testDeleteNews() throws Exception {
 		DBConnection obj_ConnectDB = new DBConnection();
 		Connection connection = null;
 		Statement statement = null;

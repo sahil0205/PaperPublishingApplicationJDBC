@@ -122,14 +122,13 @@ public class CategoryService {
 	}
 
 	private Category enterDetails() {
-		System.out.print("Enter Category Id: ");
-		int categoryId = sc.nextInt();
+			System.out.print("Enter Category Id: ");
+			int categoryId = sc.nextInt();
 
-		System.out.print("Enter Category Name: ");
-		String categoryName = sc.next();
-
+			System.out.print("Enter Category Name: ");
+			String categoryName = sc.next();
+			
 		return new Category(categoryId, categoryName);
-
 	}
 
 	private Category updateDetails(Category category) {

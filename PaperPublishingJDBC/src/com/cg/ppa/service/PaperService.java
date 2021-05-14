@@ -63,13 +63,16 @@ public class PaperService {
 			Connection connection = null;
 			Statement statement = null;
 			connection = obj_ConnectDB.get_connection();
+			
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM paper_master");
 			List<Paper> paperList = new ArrayList<>();
+			
 			while (rs.next()) {
 				Paper paper = extractPaper(rs);
 				paperList.add(paper);
 			}
+			
 			return paperList;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -86,12 +89,11 @@ public class PaperService {
 		try {
 			statement = connection.createStatement();
 			String query = "DELETE FROM paper_master where paperId='" + id + "'";
-			statement.executeQuery(query);
 			statement = connection.createStatement();
 			statement.executeUpdate(query);
 			System.out.println("Paper Deleted ");
 		} catch (Exception e) {
-			System.out.println("Cannot delete paper");
+			System.out.println(e.getMessage());
 		}
 	}
 

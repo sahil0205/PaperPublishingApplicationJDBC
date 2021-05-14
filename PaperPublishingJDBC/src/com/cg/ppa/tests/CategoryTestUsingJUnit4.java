@@ -1,26 +1,27 @@
 package com.cg.ppa.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.cg.ppa.DBConnection;
 import com.cg.ppa.entity.Category;
 import com.cg.ppa.service.CategoryService;
 
+public class CategoryTestUsingJUnit4 {
 
-class CategoryTests {
-	
 	CategoryService service = new CategoryService();
 	
-	@BeforeAll
-	static void testAddCategory() {
+	@Before
+	public void testAddCategory() {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
@@ -36,25 +37,25 @@ class CategoryTests {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
 	@Test
-	void testViewCategoryById() {
-		Category category = service.viewCategoryById(100);
-		assertEquals(100, category.getCategoryId());
-	}
-
-	@Test
-	void testViewAllCategory() {
+	public void testViewAllCategory() {
 		try {
 			List<Category> categoryList = service.viewAllCategory();
 			assertNotNull(categoryList);
 		}catch (Exception e) {
-			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
 	}
+
+	@Test
+	public void testViewCategoryById() {
+		Category category = service.viewCategoryById(100);
+		assertEquals(100, category.getCategoryId());
+	}
 	
-	@AfterAll
-	static void testDeleteCategory() {
+	@After
+	public void testDeleteCategory() {
 		try {
 			DBConnection obj_ConnectDB = new DBConnection();
 			Connection connection = null;
