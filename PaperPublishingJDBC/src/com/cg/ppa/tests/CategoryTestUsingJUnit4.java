@@ -1,8 +1,6 @@
 package com.cg.ppa.tests;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.FileReader;
 import java.sql.Connection;
